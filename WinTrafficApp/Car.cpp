@@ -2,8 +2,7 @@
 
 class Car {
 public:
-	int nr;
-	int x, y;
+	int nr, x, y;
 
 	Car(int _nr, int _x, int _y) : nr(_nr), x(_x), y(_y) {}
 
@@ -16,6 +15,7 @@ class CarList {
 public:
 	Car* tab[1000];
 	int m_i;
+	bool move;
 
 	CarList() {
 		m_i = 0;
@@ -32,9 +32,11 @@ public:
 	}
 
 	void Move(int dx, int dy) {
+		if (move) {
 		for (int i = 0; i < m_i; i++) {
 			tab[i]->x += dx;
 			tab[i]->y += dy;
+		}
 		}
 	}
 

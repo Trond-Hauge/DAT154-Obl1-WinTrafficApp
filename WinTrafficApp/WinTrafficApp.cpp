@@ -16,8 +16,8 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 static CarList carListNorth;
 static CarList carListWest;
 
-static TrafficLightList* tllNorth = new TrafficLightList(0, true);
-static TrafficLightList* tllWest = new TrafficLightList(5, false);
+static TrafficLightList* tllNorth = new TrafficLightList(true);
+static TrafficLightList* tllWest = new TrafficLightList(false);
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -166,15 +166,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HGDIOBJ hgObj = SelectObject(hdc, hcar);
 
             WCHAR sz[100];
-            wsprintf(sz, L"Timer: %d", (time/ tRes));
+            wsprintf(sz, L"Timer: %d", (time));
             TextOut(hdc, 0, 0, sz, wcslen(sz));
             
             carListNorth.Draw(hdc);
             carListWest.Draw(hdc);
             DeleteObject(hcar);
+            DeleteObject(hgObj);
 
-            tllNorth->Draw(hdc, time);
-            tllWest->Draw(hdc, time);
+            carListNorth.move = tllNorth->Draw(hdc, time);
+            carListWest.move = tllWest->Draw(hdc, time);
 
             EndPaint(hWnd, &ps);
 

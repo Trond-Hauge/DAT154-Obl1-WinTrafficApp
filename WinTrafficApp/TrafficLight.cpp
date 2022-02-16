@@ -49,7 +49,7 @@ public:
 				break;
 
 			default: // Yellow
-				hgObj = SelectObject(hdc, hr);
+				hgObj = SelectObject(hdc, hd);
 				Ellipse(hdc, x + 10, y - height + 10, x + 40, y - height + 40);
 
 				hgObj = SelectObject(hdc, hy);
@@ -58,6 +58,13 @@ public:
 				hgObj = SelectObject(hdc, hd);
 				Ellipse(hdc, x + 10, y - height + 90, x + 40, y - height + 120);
 				break;
+
+				DeleteObject(hb);
+				DeleteObject(hd);
+				DeleteObject(hr);
+				DeleteObject(hy);
+				DeleteObject(hg);
+				DeleteObject(hgObj);
 		}
 	}
 };
@@ -65,10 +72,10 @@ public:
 class TrafficLightList {
 public:
 	TrafficLight* tab[2];
-	int tOff;
 	bool vertical;
+	int initState = 0;
 
-	TrafficLightList(int _tOff, bool _vertical) : tOff(_tOff), vertical(_vertical) {
+	TrafficLightList(bool _vertical) : vertical(_vertical) {
 		if (vertical) {
 			tab[0] = new TrafficLight(330,200);
 			tab[1] = new TrafficLight(430,200);
@@ -77,12 +84,20 @@ public:
 			tab[0] = new TrafficLight(200,380);
 			tab[1] = new TrafficLight(200,530);
 		}
+
+		if (vertical) initState = 2;
 	}
 
-	void Draw(HDC hdc, int time) {
+	bool Draw(HDC hdc, int time) {
+		static int state = initState;
+		if (time % 200 == 0) state++;
+		if (state == 5) state = 0;
+
 		for (int i = 0; i < 2; i++) {
-			tab[i]->Draw(hdc, time % 40);
+			tab[i]->Draw(hdc, state);
 		}
+
+		return (state == 3 || state == 4);
 	}
 
 	void Clean() {
