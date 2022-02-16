@@ -31,9 +31,10 @@ public:
 		}
 	}
 
-	void Move(int d) {
+	void Move(int dx, int dy) {
 		for (int i = 0; i < m_i; i++) {
-			tab[i]->;
+			tab[i]->x += dx;
+			tab[i]->y += dy;
 		}
 	}
 

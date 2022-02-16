@@ -12,7 +12,8 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-static CarList carList;
+static CarList carListNorth;
+static CarList carListWest;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -102,13 +103,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     // Number of the car and spawn coordinates
-    static int n = 1, x = 100, y = 100, time;
+    static int n = 1, time;
+    static int tRes = 40;
+    static int delta = 2;
 
     switch (message)
     {
     case WM_CREATE:
         time = 0;
-        SetTimer(hWnd, 0, 1000, 0);
+        SetTimer(hWnd, 0, 1000/ tRes, 0);
         break;
 
     case WM_COMMAND:
@@ -131,21 +134,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_TIMER:
         time++;
+        carListNorth.Move(0, delta);
+        carListWest.Move(delta, 0);
         InvalidateRect(hWnd, 0, true);
         break;
 
     // Cars from west
     case WM_LBUTTONDOWN:
-        carList.push(new Car(n++, x, y));
-        x = x + 100;
+        carListWest.push(new Car(n++, 0, 400));
 
         InvalidateRect(hWnd, 0, true);
         break;
 
     // Cars from north
     case WM_RBUTTONDOWN:
-        carList.push(new Car(n++, x, y));
-        x = x + 100;
+        carListNorth.push(new Car(n++, 400, 0));
 
         InvalidateRect(hWnd, 0, true);
         break;
@@ -159,10 +162,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HGDIOBJ hgObj = SelectObject(hdc, hb);
 
             WCHAR sz[100];
-            wsprintf(sz, L"Timer: %d", time);
+            wsprintf(sz, L"Timer: %d", (time/ tRes));
             TextOut(hdc, 0, 0, sz, wcslen(sz));
             
-            carList.Draw(hdc);
+            carListNorth.Draw(hdc);
+            carListWest.Draw(hdc);
 
             EndPaint(hWnd, &ps);
 
@@ -171,7 +175,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_DESTROY:
-        carList.Clean();
+        carListNorth.Clean();
+        carListWest.Clean();
         PostQuitMessage(0);
         break;
     default:
