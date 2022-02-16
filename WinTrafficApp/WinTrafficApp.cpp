@@ -4,6 +4,7 @@
 #include "framework.h"
 #include "WinTrafficApp.h"
 #include "Car.cpp"
+#include "TrafficLight.cpp"
 
 #define MAX_LOADSTRING 100
 
@@ -14,6 +15,9 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 static CarList carListNorth;
 static CarList carListWest;
+
+static TrafficLightList* tllNorth = new TrafficLightList(0, true);
+static TrafficLightList* tllWest = new TrafficLightList(5, false);
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -158,8 +162,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
 
-            HBRUSH hb = CreateSolidBrush(RGB(255, 0, 0));
-            HGDIOBJ hgObj = SelectObject(hdc, hb);
+            HBRUSH hcar = CreateSolidBrush(RGB(255, 0, 0));
+            HGDIOBJ hgObj = SelectObject(hdc, hcar);
 
             WCHAR sz[100];
             wsprintf(sz, L"Timer: %d", (time/ tRes));
@@ -167,14 +171,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             
             carListNorth.Draw(hdc);
             carListWest.Draw(hdc);
+            DeleteObject(hcar);
+
+            tllNorth->Draw(hdc, time);
+            tllWest->Draw(hdc, time);
 
             EndPaint(hWnd, &ps);
 
             SelectObject(hdc, hgObj);
-            DeleteObject(hb);
         }
         break;
     case WM_DESTROY:
+        tllNorth->Clean();
+        tllWest->Clean();
         carListNorth.Clean();
         carListWest.Clean();
         PostQuitMessage(0);

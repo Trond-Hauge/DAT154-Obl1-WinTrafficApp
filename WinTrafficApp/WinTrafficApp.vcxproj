@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Car.cpp" />
+    <ClCompile Include="TrafficLight.cpp" />
     <ClCompile Include="WinTrafficApp.cpp" />
   </ItemGroup>
   <ItemGroup>
