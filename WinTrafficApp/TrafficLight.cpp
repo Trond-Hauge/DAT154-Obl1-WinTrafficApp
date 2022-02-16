@@ -73,7 +73,7 @@ class TrafficLightList {
 public:
 	TrafficLight* tab[2];
 	bool vertical;
-	int initState = 0;
+	int state = 0;
 
 	TrafficLightList(bool _vertical) : vertical(_vertical) {
 		if (vertical) {
@@ -85,11 +85,10 @@ public:
 			tab[1] = new TrafficLight(200,530);
 		}
 
-		if (vertical) initState = 2;
+		if (vertical) state = 2;
 	}
 
 	bool Draw(HDC hdc, int time) {
-		static int state = initState;
 		if (time % 200 == 0) state++;
 		if (state == 5) state = 0;
 
