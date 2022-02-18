@@ -58,13 +58,13 @@ public:
 				hgObj = SelectObject(hdc, hd);
 				Ellipse(hdc, x + 10, y - height + 90, x + 40, y - height + 120);
 				break;
-
-				DeleteObject(hb);
-				DeleteObject(hd);
-				DeleteObject(hr);
-				DeleteObject(hy);
-				DeleteObject(hg);
 		}
+
+		DeleteObject(hb);
+		DeleteObject(hd);
+		DeleteObject(hr);
+		DeleteObject(hy);
+		DeleteObject(hg);
 	}
 };
 

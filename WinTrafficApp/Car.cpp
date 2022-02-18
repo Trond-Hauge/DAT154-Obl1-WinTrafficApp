@@ -38,7 +38,7 @@ public:
 			tmp = tab[i];
 			if (move ||
 				((tmp->x < 330 || tmp->x > 330) && tmp->down == false) ||
-				((tmp->y < 350 || tmp->y > 350) && tmp->down)){
+				((tmp->y < 340 || tmp->y > 340) && tmp->down)){
 				tmp->x += dx;
 				tmp->y += dy;
 			}
