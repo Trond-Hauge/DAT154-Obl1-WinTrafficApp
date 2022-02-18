@@ -8,7 +8,7 @@ public:
 
 	TrafficLight(int _x, int _y) : x(_x), y(_y){}
 
-	void Draw(HDC hdc, int state) {
+	void Draw(const HDC& hdc, int state) {
 		HBRUSH hb = CreateSolidBrush(RGB(20, 20, 20));
 		HBRUSH hd = CreateSolidBrush(RGB(50, 50, 50));
 		HBRUSH hr = CreateSolidBrush(RGB(255, 20, 20));
@@ -64,7 +64,6 @@ public:
 				DeleteObject(hr);
 				DeleteObject(hy);
 				DeleteObject(hg);
-				DeleteObject(hgObj);
 		}
 	}
 };
@@ -89,7 +88,7 @@ public:
 	}
 
 	bool Draw(HDC hdc, int time) {
-		if (time % 200 == 0) state++;
+		if (time % 80 == 0) state++;
 		if (state == 5) state = 0;
 
 		for (int i = 0; i < 2; i++) {

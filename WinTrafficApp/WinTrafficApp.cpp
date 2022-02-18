@@ -140,19 +140,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         time++;
         carListNorth.Move(0, delta);
         carListWest.Move(delta, 0);
-        InvalidateRect(hWnd, 0, true);
+        InvalidateRect(hWnd, nullptr, true);
         break;
 
     // Cars from west
     case WM_LBUTTONDOWN:
-        carListWest.push(new Car(n++, 0, 400));
+        carListWest.push(new Car(n++, 0, 400, false));
 
         InvalidateRect(hWnd, 0, true);
         break;
 
     // Cars from north
     case WM_RBUTTONDOWN:
-        carListNorth.push(new Car(n++, 400, 0));
+        carListNorth.push(new Car(n++, 400, 0, true));
 
         InvalidateRect(hWnd, 0, true);
         break;
